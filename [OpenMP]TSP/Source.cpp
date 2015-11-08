@@ -13,7 +13,7 @@ double cost(std::vector<int> perm); //calculate cost
 double** matrix; //matrix from file
 int node_num; //number of nodes from file
 std::vector<int> perm_base;
-
+std::vector<int> shortest;
 double lowest_cost = INFINITY;
 
 
@@ -41,19 +41,26 @@ int main(int argc, char* argv[])
 	}
 	double stop= omp_get_wtime();
 	std::cout << lowest_cost << " : W czasie: " << (stop - start) * 1000 << "ms" << std::endl;
+	for (int k = 0; k < shortest.size(); k++)
+		std::cout << shortest[k] << " ->";
+	std::cout << "0";
 	_getch();
 }
 double cost(std::vector<int> perm)
 {
+	
 	double c = 0;
 	c += matrix[0][perm[0]];
 	for (int i = 0; i < perm.size() - 1; i++)
 	{
 		c += matrix[perm[i]][perm[i + 1]];
 	}
-	c += matrix[0][perm[perm.size()-1]];
+	c += matrix[0][perm[perm.size() - 1]];
 	if (c < lowest_cost)
+	{
 		lowest_cost = c;
+		shortest = perm;
+	}
 	return c;
 }
 void read_matrix()
